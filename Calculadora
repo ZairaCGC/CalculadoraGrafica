@@ -1,0 +1,250 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+
+public class Calculadora extends JFrame
+{
+   JLabel Letrero, lblN1, lblN2;
+   JButton btnSum, btnRes, btnMulti, btnDiv, btnLimp, btnSalir;
+   JTextField txtN1, txtN2, txtRes;
+   JPanel panel;
+   private Object objTextField;
+   
+   public Calculadora()
+   {
+      initComponents();
+   }
+   
+   private void initComponents(){
+      setSize(400, 200);
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      txtN1 = new JTextField(10);
+      txtN2 = new JTextField(10);
+      txtRes = new JTextField(10);
+      
+      Letrero = new JLabel("Calculadora");
+      lblN1 = new JLabel("Número 1: ");
+      lblN2 = new JLabel("Número 2: ");
+      
+      btnSum = new JButton("+");
+      btnRes = new JButton("-");
+      btnDiv = new JButton("/");
+      btnMulti = new JButton("*");
+      btnLimp = new JButton("Limpiar");
+      btnLimp.setMnemonic('L');
+      btnSalir = new JButton("Salir");
+      btnSalir.setMnemonic('S');
+      
+      btnSalir.addMouseListener(new MyListener());
+      
+      panel = new JPanel();
+      panel.add(Letrero);
+      lblN1.setBounds(12, 28, 116, 16);
+      panel.add(lblN1);
+      txtN1.setBounds(132, 28, 144, 20);
+      panel.add(txtN1);
+      lblN2.setBounds(12, 28, 116, 16);
+      panel.add(lblN2);
+      txtN2.setBounds(132, 28, 144, 20);
+      panel.add(txtN2);
+      
+      KeyAdapter kl = new KeyAdapter() 
+      {
+         public void keyTyped(KeyEvent evt)
+         {
+            NumKeyTyped(evt);
+         }
+      };
+      txtN1.addKeyListener(kl);
+    
+      KeyAdapter klF = new KeyAdapter() 
+      {
+         public void keyTyped(KeyEvent evt)
+         {
+            NumKeyTyped(evt);
+         }
+      };
+      txtN2.addKeyListener(klF);
+      
+      btnSum.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent evt)
+         {
+            btnSumActionPerformed(evt);
+         }
+      });
+      
+      btnRes.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent evt)
+         {
+            btnResActionPerformed(evt);
+         }
+      });
+      
+      btnDiv.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent evt)
+         {
+            btnDivActionPerformed(evt);
+         }
+      });
+      
+      btnMulti.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent evt)
+         {
+            btnMultiActionPerformed(evt);
+         }
+      });
+      
+      btnLimp.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent evt)
+         {
+            btnLimpActionPerformed(evt);
+         }
+      });
+      
+      txtRes.setEditable(false);
+      panel.add(btnSum);
+      panel.add(btnRes);
+      panel.add(btnDiv);
+      panel.add(btnMulti);
+      txtRes.setBounds(132, 28, 144, 20);
+      panel.add(txtRes);
+      panel.add(btnLimp);
+      panel.add(btnSalir);
+      setTitle("Calculadora Gráfica");
+      setContentPane(panel);
+      setVisible(true);  
+   }
+   
+   private void NumKeyTyped(KeyEvent evt)
+   {
+      objTextField = evt.getSource();
+   }
+   
+   private void btnSumActionPerformed(ActionEvent evt)
+   {
+      try{
+         double res = 0, num1 = 0, num2 = 0;
+         
+         String a = txtN1.getText();
+         num1 = Double.parseDouble(a.trim());
+         String b = txtN2.getText();
+         num2 = Double.parseDouble(b.trim());
+         res = (num1 + num2);
+         String texto = String.format("%.3f", res);
+         txtRes.setText(texto);
+      }
+      catch (NumberFormatException e){
+         JOptionPane.showMessageDialog(null, "El valor no es correcto", 
+         "Error", JOptionPane.ERROR_MESSAGE);
+         txtN1.requestFocus();
+         txtN2.setText(null);
+      }
+   }
+   
+   private void btnResActionPerformed(ActionEvent evt)
+   {
+      try{
+         double num1 = 0, num2 = 0, res = 0;
+         
+         String a = txtN1.getText();
+         num1 = Double.parseDouble(a.trim());
+         String b = txtN2.getText();
+         num2 = Double.parseDouble(b.trim());
+         res = (num1 - num2);
+         String texto = String.format("%.3f", res);
+         txtRes.setText(texto);
+      }
+      catch (NumberFormatException e){
+         JOptionPane.showMessageDialog(null, "El valor no es correcto", 
+         "Error", JOptionPane.ERROR_MESSAGE);
+         txtN1.setText(" "); 
+         txtN1.requestFocus();
+         txtN2.setText(null);
+      }
+   }
+   
+   private void btnDivActionPerformed(ActionEvent evt)
+   {
+      try{
+         double num1 = 0, num2 = 0, res = 0;
+         
+         String a = txtN1.getText();
+         num1 = Double.parseDouble(a.trim());
+         String b = txtN2.getText();
+         num2 = Double.parseDouble(b.trim());
+         if (num2 == 0.0) 
+         {
+            JOptionPane.showMessageDialog(null, "División entre 0", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+            txtN2.setText(" "); 
+            txtN2.requestFocus();
+            txtRes.setText(" ");
+         }
+         else 
+         {
+            res = (num1/num2);
+            String texto = String.format("%.3f", res);
+            txtRes.setText(texto);
+         }
+      }
+      catch (NumberFormatException e){
+         JOptionPane.showMessageDialog(null, "El valor no es correcto", 
+         "Error", JOptionPane.ERROR_MESSAGE);
+         txtN1.setText(" "); 
+         txtN1.requestFocus();
+         txtN2.setText(null);
+      }
+   }
+
+   private void btnMultiActionPerformed(ActionEvent evt)
+   {
+      try{
+         double num1 = 0, num2 = 0, res = 0;
+         
+         String a = txtN1.getText();
+         num1 = Double.parseDouble(a.trim());
+         String b = txtN2.getText();
+         num2 = Double.parseDouble(b.trim());
+         res = (num1 * num2);
+         String texto = String.format("%.3f", res);
+         txtRes.setText(texto);
+      }
+      catch (NumberFormatException e){
+         JOptionPane.showMessageDialog(null, "El valor no es correcto", 
+         "Error", JOptionPane.ERROR_MESSAGE);
+         txtN1.setText(" "); 
+         txtN1.requestFocus();
+         txtN2.setText(null);
+      }
+   }
+
+   private void btnLimpActionPerformed(ActionEvent evt)
+   {
+      try{
+         txtN1.setText(""); 
+         txtN1.requestFocus();
+         txtN2.setText(null);
+         txtRes.setText(null);
+      }
+      catch (NumberFormatException e){
+         JOptionPane.showMessageDialog(null, "El valor no es correcto", 
+         "Error", JOptionPane.ERROR_MESSAGE);
+         txtN1.setText(" "); 
+         txtN1.requestFocus();
+         txtN2.setText(null);
+      }
+   } 
+   
+   private class MyListener extends MouseAdapter
+   {
+      public void mouseClicked(MouseEvent event)
+      {
+         System.exit(0);
+      }
+   }
+}
